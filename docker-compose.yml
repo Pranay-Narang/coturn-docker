@@ -1,0 +1,20 @@
+version: '3.9'
+
+networks: 
+    web:
+        external: true
+
+services: 
+    turn:
+        image: coturn/coturn
+        ports: 
+            - "49152-65535:49152-65535/udp"
+        networks: 
+            - web
+        volumes: 
+            - "./my.cnf:/etc/coturn/turnserver.conf"
+        labels: 
+            - traefik.http.routers.coturn.rule=Host(`turn.pranaynarang.dev`)
+            - traefik.http.routers.coturn.tls=true
+            - traefik.http.routers.coturn.tls.certresolver=lets-encrypt
+            - traefik.port=3478
